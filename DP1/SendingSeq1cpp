@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve()
+{
+    int n;
+    cin >> n;
+    vector<long long> a(n + 1,0);
+    for (int i = 1; i <= n; i++)
+    {
+        cin >> a[i];
+    }
+
+    vector<int> dp(n + 1, 0);
+
+    // dp[i] : represents if i can make a array a from a` where a is of the form A( ) ()B C( ) and ( ) ( ) ( ) are segments of a`
+
+    dp[0] = 1;
+
+    for (int i = 1; i <= n; i++)
+    {
+
+        if (i + a[i] <= n && dp[i - 1] == 1)
+        {
+            dp[i + a[i]] = 1;
+        }
+        if ((i - a[i]) >= 1 && dp[i - a[i] - 1])
+        {
+            // i can make a segment from ahead, usning a[i], but now also next subproblem should have the answer
+            dp[i] = 1;
+        }
+    }
+
+    if (dp[n])
+    {
+        cout << "YES" << endl;
+    }
+    else {cout << "NO" << endl;
+    }
+
+    return;
+}
+
+// 5
+// 3 7 2 1 1
+int main()
+{
+
+    int t;
+    cin >> t;
+    while (t--)
+    {
+        solve();
+    }
+    return 0;
+}
