@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class DSU{
+    public :
+    vector<int> parent,rank;
+    DSU(int n){
+       parent.resize(n+1,0);
+       rank.resize(n+1,0);
+       
+       for(int i = 1 ; i <=n ;i ++){
+            parent[i] = i;
+       }
+    }    
+
+    // find the root for the node x
+    int findSet(int x){
+        if( x == parent[x]) return x;
+        return parent[x] = findSet(parent[x]);
+    }
+
+    void unionSet(int a, int b){
+        a = findSet(a);
+        b = findSet(b);
+
+        if( a != b){
+            if(rank[a] < rank[b]){
+                swap(a,b);
+            }
+            parent[b] = a;
+            if( rank[a] == rank[b]) rank[a]++;
+        }
+    }
+};
+
+int main(){
+
+    int n,m ;
+    cin >> n >> m;
+
+    DSU dsu(n);
+
+    for(int i = 0; i < m ; i ++){
+        string s;
+        int u,v;
+        cin >> s >> u >> v;
+        if( s == "union"){
+            dsu.unionSet(u,v);
+        }
+
+        else if( s == "get"){
+            if( dsu.findSet(u) == dsu.findSet(v)){
+                cout << "YES" << endl;
+            }
+            else cout << "NO" << endl;
+        }
+    }
+
+    return 0;
+}
