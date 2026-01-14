@@ -100,8 +100,9 @@ int maxEdgeValueInPath(int u, int v, vector<int> &level, vector<vector< pair<int
     int m = par[0].size();
     for(int i = 0; i < m ; i ++){
         if( diff & (1 << i)) {
-            u = par[u][i].first;
             maxValue = max(maxValue, par[u][i].second);
+            u = par[u][i].first;
+
         }
     }
 
