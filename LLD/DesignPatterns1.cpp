@@ -44,6 +44,29 @@ Factory : create ibjects od similar type : implementing similar methods/ based o
 
 */
 
+class Singleton {
+
+    private :
+    Singleton() = default;
+
+    Singleton( const Singleton & singleton) = delete;
+    Singleton & operator = (const Singleton & singleton) = delete;
+
+    public :
+
+    // meyers singleton printciple : lazy initialisation : when until is called, we dont create the static instance of class Singleton
+    // 
+    static Singleton & getInstace(){
+
+        // private constructor is called only once : when the getInstance() is called the first time...
+        // post that no new object is created
+        static Singleton instance;
+        return instance;
+    }
+    
+
+};
+
 
 int main(){
 
