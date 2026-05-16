@@ -1,0 +1,125 @@
+COPILOT FOLLOW Suggestions
+
+
+
+Copilot suggestions service (backend)
+
+
+Enter a query  : get follow up suggestions (various chips) 8:
+
+
+Collect signals to improve the ranking of suggestions. Get the best suggestion based on some signals
+
+
+A ml model comes back with the signals ranking
+
+What schema do you build to collect the right signals?
+What events do you log?
+
+Once the data points are stored, they can be used as a training set. 
+
+Pipeline to extract the training set from your infrastructure to go ahead and train the models to get the ranking for suggestions.
+
+
+How to store the training?
+
+
+Things which will help rank data : Imp data points ;
+
+Tom hanks -> * suggestons: User activity : no of clicks on that suggestion
+1. no of clicks on that suggestion. Position of the suggestion
+2. Related searches : subsequent query
+3. possible auto suggest options are there
+4. Time taken for the page : session
+5. Urls captured on the result page
+
+
+Schema design : 
+
+                 CopilotSuggestion Service : give top 8 suggestions  
+
+uses some ML model 
+
+
+input : query
+output : vector<SuggestionObject> 
+
+
+ generic Event for these activities : logs/ 
+
+sTORED IN LOGS ACCOUBNT : 
+
+user_id
+Account_Id : fetchAccountDetails(id)
+sessions_id
+search_query (main question)
+vector<Suggestions>
+TimePoint currTime;
+ActionType : CLick/ Edit/
+NextClick : Link/ Suggestion/ Related Search/ 
+
+
+
+PIPELINE : 
+
+ 
+EVENT HUBS : STREAM THE DATA
+
+Once I have streamed it, 
+Raw data -> processed. 
+
+How will we partition the RAW data from the DB to the Ml model?
+
+1.Remove duplicate entries
+2. filter by time/ hourly basis  : Range Based 
+3. group by queryId 
+4. 
+
+
+Stream vs Batch : 
+Use case based : 
+Batch 
+Streaming 
+
+
+-> ML Model as trainign set : 
+
+
+
+Deploy the service and call the model from the API
+
+Meeting deployment constraints
+
+
+
+ML artifact : give it the query and return the respobse in an offline setup runs on gpu
+
+Reliability :
+
+Service would be hoste din ultiple regions : BCDR : Disaster recovery 
+1 deployment : multiple pods in different regions serving the code responsible for hitting the model.
+
+Use the old trained model in case the new model fails. 
+
+Latency : 
+
+Think of internet paradigm : Should be fast : 
+Caching : Frequent queries per day : Store results in the cache from the model itself
+We can do some sort of mactching for frequient queries : Service side
+Aim could be reduce model calls again and again
+
+Routing : Region specific routing : AE, NE, WUS, directed to endpoints : Load balancr of thar region : that will reduce the time
+
+
+Load increases : Horizontal auto pod scaling can be done to take care of load
+
+
+New model has been shipped. P99 latency is spiking. Product quality has dropped.
+
+How to handle this livesite issue?
+Permanent solution : ?? Not a hotfix 
+
+-- Model level issue vs infra level issue> How to tell?
+
+
+

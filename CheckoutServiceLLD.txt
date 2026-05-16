@@ -1,0 +1,66 @@
+
+Checkout Module for an Ecommerce System 
+
+
+// selected the order items so far
+
+
+
+CheckoutService{
+
+PaymentService -> Strategy : creditcard, upi
+Notifiers : observer 
+LoggerClass : 
+InventoryService : orders
+
+1. placeOrder()
+
+// id-> map all the stock items
+
+order : {
+p1
+p2
+..
+
+
+}
+addAdress
+MakePayment 
+create order -> stored in db OrderRepo
+
+// create 
+
+
+
+2. sendNotification()
+
+3. getOrderItemStatus 
+
+
+2. editAddress()
+
+3. addAddress()
+
+4
+
+
+
+
+
+
+};
+
+db :
+p1 :  
+
+
+InventorySvc{
+
+	
+ getItemsInStockOrNot()
+
+ /getInventoryItems/all productIds
+
+	
+
+"

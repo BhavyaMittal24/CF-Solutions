@@ -1,0 +1,174 @@
+Designing the Google Drive Desktop Client. 
+This client must monitor a local folder, 
+identify changes, and synchronize them efficiently to a remote server. 
+
+You are making changes only in the desktop app. No need to make change in the browser.
+Think of it like an app in the mobile.
+
+
+Text based files
+Multiple accounts can edit and read at the same time. Concurrency needs to be handled
+
+ 
+IDriveClient : Interface : 
+
+
+start()
+
+// when you are closing the app, you will also stop syncing with the server
+stopSync()
+
+
+// make changes to thwe local files and send update to server 
+
+onLocalChange()
+
+// triggered when a remote sends some update to the entrie app
+onRemoteChange()
+
+readFile()
+
+
+Objects : ER diagram 
+
+Some objects/classes  I need :
+Main class : DriveClient : IDriveClient
+
+
+IFileWatcher* watcher : 
+ 
+SyncEngine* engine
+ 
+FileManager* fileManager 
+
+
+Local DB : storing all the files which need to be changes : per file change
+map<string, Change> localChangeDB 
+
+
+Public : 
+
+start()
+sync()
+onLocal
+onRemote
+readFile()
+
+
+DriveCLient(IFileWatcher* fileWatcher, SyncEngine* engine, FileManager* fileManager) : fileWatcher(fileWatcher) {}
+
+
+
+
+
+
+
+}
+
+
+int main(){
+
+
+ DriveClient.getInstance();
+
+ FileWatcher1 filewatchstrategy1 = new FileWatcher1 ();
+ FileWatcher1 filewatchstrategy2 = new FileWatcher2 ();
+	
+
+}
+-----------------------------
+Observer pattern : For the watcher, syncEngine, -> syncWith remote
+
+Strategy pattern : Diff strategies to send content, diff ways to store the changes and send it to remote 
+
+Factory pattern : for different strategies : we can have objects impe,emting these strategies ; 
+
+Singleton : DriveClient ; just one nstance : singleton pattenrn : 
+
+
+IFileWatcher {
+
+
+- virtual void watch()
+- virtual detectChanges()
+
+}
+
+FileWatcherStrategy1 : public IFileWatcher {
+string pathToFile
+
+public ;
+
+void watch() @override
+
+
+}
+
+
+FIleWatcher2 : 
+
+
+class Change {
+
+int startRow,
+int endRow;
+
+int startCol;
+int endCol;
+string appendString;
+
+}
+
+
+
+                  S                                                      
+
+// When   a new file is created : 
+
+
+filePath is available : 
+
+watcher will detect changes : OS APIs
+
+onLocalChange(filePath,int startRow, int startCol, int endRpw, int EndCOl, string append) is called : 
+
+Chunking : Concept for copying the content : Parallel transfers : into smaller fragments : atomic aspect...
+Standard way
+
+
+// file manager works interbally : 
+
+syncEngine->syncTORemote() // updated to remote server
+
+// file is created for the first time : No concurrent users.
+// ignore idempotent calls
+// network latency : Rety mechanism is added :  Retry is not pissivle for so ling
+
+
+// Batch the stuff : Challenge for 10 files
+
+// RDBMS locally : : to track all the files which need to be updated : that keeps adding incrementally : local DBS
+
+
+
+While syncing : 90% done, what to do : comes back with netwprk error : 
+COme back with currStart, currEnd, EndPosition, remStringLeft : Update it in the map ; 
+
+
+
+
+Q. File created locally, synced with remote : Rename the file. no content change?
+
+1. Clear the old one, create new one completely 
+
+2. How the files look like in remote ? : -> FileManager  : Folders : 
+
+                      /
+   folder1                  folder2
+
+
+ 
+
+
+
+

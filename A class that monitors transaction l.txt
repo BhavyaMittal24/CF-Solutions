@@ -1,0 +1,90 @@
+A class that monitors transaction log usage in a database system. The class should:
+Accept two lists: one representing transaction log usage percentages for each log file, and another representing log usage in gigabytes (GB) for each log file.
+Check if any log file has usage greater than or equal to 60% or greater than or equal to 600GB.
+
+If any threshold is exceeded, retrieve a list of active transactions. For each transaction:
+If the transaction is a system transaction (its ID starts with "system"), attempt to find and kill its blocking session.
+Otherwise, attempt to kill the transaction session directly.
+Print appropriate messages for actions taken and for cases where the threshold is not met.
+
+Implement dummy methods for retrieving active transactions and finding blocking sessions.
+Handle exceptions gracefully when attempting to kill sessions.
+ 
+Code:
+
+in db -> 
+ 
+import java.util.*;
+ 
+
+public class TransactionLogMonitor {
+
+ 
+// file1, file2.... : UsagePercentage[I]
+ 
+// file1, file2,,   : UsageGB[I]
+
+// pass parameters by reference 
+
+
+   public void checkLogUsage(List<Double> logUsagePercentages, List<Double> logUsageGBs) {
+       boolean thresholdExceeded = false;
+
+       for (int i = 0; i < logUsagePercentages.size(); i++) {
+
+           if (logUsagePercentages.get(i) >= 60 || logUsageGBs.get(i) >= 600) {
+               thresholdExceeded = true; 
+           }
+       }
+ 
+
+       if (thresholdExceeded) {
+          System.out.println("Transaction Log Used Space more than 60% or 600GB");
+           List<String> activeTransactions = getActiveTransactions(); // getActiveTransactions may take some time : 
+           for (String txn : activeTransactions) {
+
+               if (txn.contains("system")) {
+
+                   String spid = txn.replace("system", ""); // We can add some constants : "" , GeneralStrings.emptyString -= > ""
+			// wrap this in a function : heleper to get the right spid based out of system transaction
+
+                   String blockingSession = findBlockingSession(spid);
+                   if (blockingSession != null && blockingSession.length() > 0) {
+                      killSession(blockingSession);
+			// "session is killed"
+// Optionally : We can log even what has been done : Killing sessions or killing txn : In a logger service
+                   }
+               } else {
+
+                   killSession(txn); // all these would be async
+//                 more system,out for telling wwhat happened : "txn is killed"
+               }
+           }
+       } else {
+           System.out.println("Condition not met.");
+       }
+   }
+ 
+
+// making a call to db : somewhere: this can take time andto get the result
+
+   public List<String> getActiveTransactions() {
+       List<String> txns = new ArrayList<>();
+       txns.add("system123");
+       txns.add("456");
+       return txns;
+   }
+
+ // this would need to be omplemented
+   public String findBlockingSession(String spid) {
+       return null;
+   }
+ 
+
+	// this should also be an async call : making some change
+   public void killSession(String sessionId) {
+       System.out.println("Killing session: " + sessionId);
+
+	// try // catch 
+   }
+

@@ -1,0 +1,40 @@
+
+using Clock = std::chrono::system_clock;
+using TimePoint = std::chrono::time_point<Clock>;
+       
+auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count();
+
+
+#include <chrono>
+#include <iostream>
+#include <cmath> // for std::ceil
+
+using Clock = std::chrono::system_clock;
+using TimePoint = std::chrono::time_point<Clock>;
+
+class Ticket {
+private:
+    TimePoint entryTime;
+    TimePoint exitTime;
+    double hourlyRate = 10.0;
+
+public:
+    Ticket() : entryTime(Clock::now()) {}
+
+    void setExitTime() {
+        exitTime = Clock::now();
+    }
+
+    double calculateFees() {
+        // 1. Calculate the raw duration
+        auto duration = exitTime - entryTime;
+
+        // 2. Convert to minutes to get more precision
+        auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration).count();
+
+        // 3. Logic: For example, charge per hour (rounding up)
+        double hours = std::ceil(minutes / 60.0);
+        
+        return hours * hourlyRate;
+    }
+};
