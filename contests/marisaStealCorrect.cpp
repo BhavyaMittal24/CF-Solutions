@@ -1,26 +1,31 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include<bits/stdc++.h>
 using namespace std;
 
 void solve() {
     int n;
     cin >> n;
 
-    int count0 = 0, count1 = 0, count2 = 0;
+    int cnt0 = 0;
+    int cnt1 = 0;
+    int cnt2 = 0;
 
     for (int i = 0; i < n; i++) {
-        int w;
-        cin >> w;
-        if (w == 0) count0++;
-        else if (w == 1) count1++;
-        else if (w == 2) count2++;
+        int x;
+        cin >> x;
+        if (x == 0) {
+            cnt0++;
+        }
+        else if ( x== 1){
+            cnt1++;
+        } 
+        else{
+            cnt2++;
+        }   
     }
 
-    long long max_operations = 0;
+    long long op = 0;
 
-    max_operations += count0;
+    op += cnt0;
 
     int pairs = min(count1, count2);
     max_operations += pairs;
